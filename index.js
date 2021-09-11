@@ -1,56 +1,46 @@
-const { Telegraf, Markup } = require('telegraf')
-require('dotenv').config()
+import telegraf from 'telegraf';
+const { Telegraf, Markup, Scenes: { BaseScene, Stage }, session } = telegraf;
+import d from 'dotenv'
+d.config()
 
-const text = require('./const')
+//scenes
+import choiceListRoutesScene from './scenes/choiceListRoutesScene.js';
+import startBotScene from './scenes/startBotScene.js';
+import recordsScene from './scenes/recordsScene.js';
+import startRaceScene from './scenes/startRaceScene.js';
+import finishRaceScene from './scenes/finishRaceScene.js';
+import resultRaceScene from './scenes/resultRaceScene.js';
+//keyboards
+import choiceListRoutesKeyboard from './sceneKeyboards/choiceListRoutesKeyboard.js'
+import startBotKeyboard from './sceneKeyboards/startBotKeyboard.js'
+import recordsKeyboard from './sceneKeyboards/recordsKeyboard.js'
+import startRaceKeyboard from './sceneKeyboards/startRaceKeyboard.js'
+import finishRaceKeyboard from './sceneKeyboards/finishRaceKeyboard.js'
+import resultRaceKeyboard from './sceneKeyboards/resultRaceKeyboard.js'
+
+//instances
+export const choiceListRoutesInstance = new choiceListRoutesScene(BaseScene, 'choiceListRoutes', choiceListRoutesKeyboard)
+export const startBotSceneInstance = new startBotScene(BaseScene, 'startBotScene', startBotKeyboard)
+export const recordsSceneInstance = new recordsScene(BaseScene, 'recordsScene', recordsKeyboard)
+export const startRaceInstance = new startRaceScene(BaseScene, 'startRaceScene', startRaceKeyboard)
+export const finishRaceInstance = new finishRaceScene(BaseScene, 'finishRaceScene', finishRaceKeyboard)
+export const resultRaceInstance = new resultRaceScene(BaseScene, 'resultRaceScene', resultRaceKeyboard)
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
-bot.start((ctx) => {
-    console.log(ctx.message)
-    return ctx.reply(`Hello ${ctx.message.from.username}`)
+const stage = new Stage([
+    choiceListRoutesInstance.start(),
+    startBotSceneInstance.start(),
+    recordsSceneInstance.start(),
+    startRaceInstance.start(),
+    finishRaceInstance.start(),
+    resultRaceInstance.start()
+])
+bot.use(session())
+bot.use(stage.middleware())
+
+bot.start(ctx => {
+    ctx.scene.enter(startBotSceneInstance.name)
 })
-bot.help((ctx) => ctx.reply(text.command))
-bot.on('sticker', (ctx) => ctx.reply('👍'))
-bot.hears('hi', (ctx) => ctx.reply('Hey there'))
-
-bot.command('course', async (ctx) => {
-    try {
-        await ctx.replyWithHTML('<b>Курсы</b>', Markup.inlineKeyboard(
-            [
-                [
-                    Markup.button.callback('Редакторы', 'btn_1'),
-                    Markup.button.callback('Отзывы', 'btn_2'),
-                    Markup.button.callback('Обзор', 'btn_3')
-                ],
-                [Markup.button.callback('Сохранить', 'btn_4'),]
-
-            ]
-        ))
-    } catch (error) {
-        console.log(error); 
-    }
-
-})
-
-function addActionBot(name, src, text) {
-    bot.action(name, async (ctx) => {
-        try {
-            await ctx.answerCbQuery()
-            if (src) {
-                await ctx.replyWithPhoto({
-                    source: src
-                })
-            }
-            await ctx.replyWithHTML(text, {
-                disable_web_page_preview: true
-            })
-        } catch (error) {
-            console.log(error);
-        }
-    })
-
-}
-
-
 bot.launch()
 
 // Enable graceful stop
