@@ -3,5 +3,5 @@ import { Markup } from "telegraf"
 
   
 export default Markup.keyboard([
-     ['Назад']
+   ['Подтвердить'], ['Изменить'] 
 ]).resize(true) 

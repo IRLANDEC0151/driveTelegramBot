@@ -1,3 +1,4 @@
+import convertTime from '../helpers/convertTime.js'
 import { finishRaceInstance, resultRaceInstance, startRaceInstance } from '../index.js'
 import SceneConstructor from './sceneConstructor.js'
 
@@ -12,8 +13,8 @@ export default class finishRaceScene extends SceneConstructor {
                 } else {
                     await ctx.reply('Поехали!', this.keyboard)
                     clearInterval(interval)
-                     dateStart = new Date()
-                 
+                    dateStart = new Date()
+
                 }
                 count--
             }, 1000)
@@ -21,8 +22,9 @@ export default class finishRaceScene extends SceneConstructor {
 
         this.scene.hears(this.keyboard.reply_markup.keyboard[0][0], ctx => {
             dateEnd = new Date()
-            let raceTime = Math.floor((dateEnd - dateStart) / 3600000) + 'ч : ' + Math.floor((dateEnd - dateStart) / 60000) + 'мин : ' + Math.round((dateEnd - dateStart) % 60000 / 1000) + 'сек'
+            let raceTime = convertTime(dateEnd - dateStart)
             ctx.session.raceTime = raceTime
+            ctx.session.raceTimeForCompare = dateEnd - dateStart
             ctx.scene.enter(resultRaceInstance.name)
 
         })
