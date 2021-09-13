@@ -18,6 +18,7 @@ import resultRaceScene from './scenes/resultRaceScene.js';
 import emptyRoutesScene from './scenes/emptyRoutesScene.js';
 import createRouteScene from './scenes/createRouteScene.js';
 import confirmRouteScene from './scenes/confirmRouteScene.js';
+import deleteRouteScene from './scenes/deleteRouteScene.js';
 //keyboards
 import choiceListRoutesKeyboard from './sceneKeyboards/choiceListRoutesKeyboard.js'
 import startBotKeyboard from './sceneKeyboards/startBotKeyboard.js'
@@ -28,7 +29,8 @@ import resultRaceKeyboard from './sceneKeyboards/resultRaceKeyboard.js'
 import emptyRoutesKeyboard from './sceneKeyboards/emptyRoutesKeyboard.js'
 import createRouteKeyboard from './sceneKeyboards/createRouteKeyboard.js'
 import confirmRouteKeyboard from './sceneKeyboards/confirmRouteKeyboard.js'
-   
+import deleteRouteKeyboard from './sceneKeyboards/deleteRouteKeyboard.js'
+
 //instances
 export const choiceListRoutesInstance = new choiceListRoutesScene(BaseScene, 'choiceListRoutes', choiceListRoutesKeyboard)
 export const startBotSceneInstance = new startBotScene(BaseScene, 'startBotScene', startBotKeyboard)
@@ -39,6 +41,7 @@ export const resultRaceInstance = new resultRaceScene(BaseScene, 'resultRaceScen
 export const emptyRoutesInstance = new emptyRoutesScene(BaseScene, 'emptyRoutesScene', emptyRoutesKeyboard)
 export const createRouteInstance = new createRouteScene(BaseScene, 'createRouteScene', createRouteKeyboard)
 export const confirmRouteInstance = new confirmRouteScene(BaseScene, 'confirmRouteScene', confirmRouteKeyboard)
+export const deleteRouteInstance = new deleteRouteScene(BaseScene, 'deleteRouteScene', deleteRouteKeyboard)
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 const stage = new Stage([
@@ -50,11 +53,12 @@ const stage = new Stage([
     resultRaceInstance.start(),
     emptyRoutesInstance.start(),
     createRouteInstance.start(),
-    confirmRouteInstance.start()
+    confirmRouteInstance.start(),
+    deleteRouteInstance.start()
 ])
 
 
- 
+
 async function startBot() {
     console.log('start');
     const client = (await MongoClient.connect(process.env.MONGODB_URI, {
@@ -82,8 +86,7 @@ async function startBot() {
             candidate = user
             await user.save()
         }
-        ctx.session.userId = candidate.id 
-        ctx.session.isRoutes = (candidate.routes.length != 0) ? true : false
+        ctx.session.userId = candidate.id
         ctx.scene.enter(startBotSceneInstance.name)
     })
 

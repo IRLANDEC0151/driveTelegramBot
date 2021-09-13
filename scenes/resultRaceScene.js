@@ -11,11 +11,10 @@ export default class resultRaceScene extends SceneConstructor {
                 ctx.reply(`Первое время маршрута: ${ctx.session.raceTime}`, this.keyboard)
             } else if (result.isRecord) {
                 ctx.reply(`Время: ${ctx.session.raceTime}.\nПоздравляем, новый рекорд!\nБыстрее на ${result.fasterBy}`, this.keyboard)
-            } else {
-                ctx.reply(`Время: ${ctx.session.raceTime}.\n
-                До рекорда не хватило ${result.slowerBy}`, this.keyboard)
+            } else { 
+                ctx.reply(`Время: ${ctx.session.raceTime}.\nДо рекорда не хватило ${result.slowerBy}`, this.keyboard)
             }
-        })
+        }) 
         this.scene.hears(this.keyboard.reply_markup.keyboard[0][0], async ctx => {
             ctx.scene.enter(startBotSceneInstance.name)
         })

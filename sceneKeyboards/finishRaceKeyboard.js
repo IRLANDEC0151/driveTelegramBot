@@ -1,6 +1,5 @@
 import { Markup } from "telegraf"
 
-const keyboard = Markup.keyboard([
+export default Markup.keyboard([
     ['Финиш!', 'Начать заново'], ['Назад']
 ]).resize(true)
-export default keyboard

@@ -6,4 +6,4 @@ export default async function getRoutes(userId) {
    const arr = await candidate.populate("routes")
    const routesNames = arr.routes.map(route => [route.name])
    return routesNames
-}       
+}        
