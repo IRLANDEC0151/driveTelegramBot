@@ -9,7 +9,8 @@ export default class startBotScene extends SceneConstructor {
                 ctx.reply('Главное меню', this.keyboard)
             })
 
-            this.scene.hears(this.keyboard.reply_markup.keyboard[0][0], async ctx => {
+            this.scene.hears(this.keyboard.reply_markup.keyboard[0][0], async ctx => {  
+
                 const candidate = await User.findOne({ _id: ctx.session.userId })
                 ctx.session.isRoutes = (candidate.routes.length != 0) ? true : false
                 if (ctx.session.isRoutes) {
@@ -19,6 +20,7 @@ export default class startBotScene extends SceneConstructor {
                 }
             })
             this.scene.hears(this.keyboard.reply_markup.keyboard[0][1], async ctx => {
+ 
                 ctx.scene.enter(recordsSceneInstance.name)
             })
             return this.scene

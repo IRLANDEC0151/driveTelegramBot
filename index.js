@@ -7,7 +7,6 @@ import mongoose from 'mongoose';
 import { session } from 'telegraf-session-mongodb';
 import User from './models/user.js';
 
-
 //scenes
 import choiceListRoutesScene from './scenes/choiceListRoutesScene.js';
 import startBotScene from './scenes/startBotScene.js';

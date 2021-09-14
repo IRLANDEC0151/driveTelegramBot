@@ -8,7 +8,7 @@ export default class finishRaceScene extends SceneConstructor {
         this.scene.enter(ctx => {
             let count = 3
             interval = setInterval(async () => {
-                if (count != 0) {
+                if (count != 0) { 
                     ctx.reply(count)
                 } else {
                     await ctx.reply('Поехали!', this.keyboard)
