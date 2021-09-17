@@ -12,7 +12,6 @@ export default class createRouteScene extends SceneConstructor {
         }) 
          
         this.scene.hears(/^(?!.*\/start).+$/, async ctx => {
-            console.log(ctx.message.text);
             if (ctx.message.text != this.keyboard.reply_markup.keyboard[0][0]) {
                 ctx.session.newRoute=ctx.message.text 
                 ctx.scene.enter(confirmRouteInstance.name)
